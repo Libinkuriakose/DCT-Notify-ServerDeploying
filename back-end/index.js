@@ -3,7 +3,10 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('./config/db');
 var socket = require('socket.io');
-const port = 3001;
+const path = require('path');
+
+
+const PORT = process.env.PORT || 5000;
 
 const { routes } = require('./config/routes');
 
@@ -13,8 +16,18 @@ app.use(cors());
 
 app.use('/', routes);
 
-app.listen(port, () => {
-    console.log('listening on port', port);
+
+app.use(express.static(path.join(__dirname, './app/front-end/demo-app/build')));
+
+app.get('*', (req, res) => {
+ res.sendFile(path.join(__dirname,'./app/front-end/demo-app/build/index.html'));
+});
+
+
+
+
+app.listen(PORT, () => {
+    console.log('listening on port', PORT);
 });
 
 server = app.listen(8080, function(){
